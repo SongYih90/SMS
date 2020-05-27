@@ -1,0 +1,97 @@
+﻿@model PagedList.IPagedList<SalaryManagementSystem.Employee>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Employee Details</h2>
+
+<div id="CreateDiv">
+    <h3>Create</h3>
+    <div style="display:inline;margin:5px;">
+        <label>Create New Employee entry: </label>
+        @Html.ActionLink("Create", "Create")
+    </div>
+    @using (Html.BeginForm("Index", "Employees", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div style="display:inline;margin:5px;">
+            <label>Upload Employee entries: </label>
+            <div class="form-group" style="display:inline">
+                <input type="file" id="dataFile" name="upload" style="display:inline" />
+            </div>
+            <div class="form-group" style="display:inline">
+                <input type="submit" value="Upload" style="display:inline" />
+            </div>
+        </div>
+    }
+</div>
+
+<div id="SearchDiv">
+    <h3>Search</h3>
+    <div style="display:inline;">
+        @using (Html.BeginForm("Index", "Employees", FormMethod.Get))
+        {
+            <label>Find by ID, Login Name or Name:</label>
+            @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        }
+    </div>
+    <div style="display:inline;">
+        @using (Html.BeginForm("Index", "Employees", FormMethod.Get))
+        {
+            <label>Min Salary:</label>
+            @Html.TextBox("MinSalaryString", ViewBag.CurrentMinSalFilter as string)
+            <label>Max Salary:</label>
+            @Html.TextBox("MaxSalaryString", ViewBag.CurrentMaxSalFilter as string)
+            <input type="submit" value="Search" />
+        }
+    </div>
+</div>
+
+<br />
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Employee ID", "Index", new { sortOrder = ViewBag.SortingIDParm, currentFilter = ViewBag.CurrentFilter, currentMinSalFilter = ViewBag.CurrentMinSalFilter, currentMaxSalFilter = ViewBag.CurrentMaxSalFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Login Name", "Index", new { sortOrder = ViewBag.SortingLoginNameParm, currentFilter = ViewBag.CurrentFilter, currentMinSalFilter = ViewBag.CurrentMinSalFilter, currentMaxSalFilter = ViewBag.CurrentMaxSalFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.SortingNameParm, currentFilter = ViewBag.CurrentFilter, currentMinSalFilter = ViewBag.CurrentMinSalFilter, currentMaxSalFilter = ViewBag.CurrentMaxSalFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Salary", "Index", new { sortOrder = ViewBag.SortingSalaryParm, currentFilter = ViewBag.CurrentFilter, currentMinSalFilter = ViewBag.CurrentMinSalFilter, currentMaxSalFilter = ViewBag.CurrentMaxSalFilter })
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoginName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Salary)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.EmployeeID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.EmployeeID })
+            </td>
+        </tr>
+    }
+
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, currentMinSalFilter = ViewBag.CurrentMinSalFilter, currentMaxSalFilter = ViewBag.CurrentMaxSalFilter }))

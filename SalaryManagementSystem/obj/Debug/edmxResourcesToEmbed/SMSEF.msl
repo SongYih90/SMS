@@ -4,10 +4,10 @@
     <EntitySetMapping Name="Employees">
       <EntityTypeMapping TypeName="SalaryManagementModel.Employee">
         <MappingFragment StoreEntitySet="Employees">
-          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-          <ScalarProperty Name="LoginName" ColumnName="LoginName" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Salary" ColumnName="Salary" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="LoginName" ColumnName="LoginName" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

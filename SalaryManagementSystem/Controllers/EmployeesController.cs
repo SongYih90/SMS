@@ -2,118 +2,338 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http;
-using System.Web.Http.Description;
+using System.Web;
+using System.Web.Mvc;
+using LumenWorks.Framework.IO.Csv;
 using SalaryManagementSystem;
+using PagedList;
 
 namespace SalaryManagementSystem.Controllers
 {
-    public class EmployeesController : ApiController
+    public class EmployeesController : Controller
     {
         private SalaryManagementEntities db = new SalaryManagementEntities();
+        private string uriStr = "http://localhost/SalaryManagement/api/";
 
-        // GET: api/Employees
-        public IQueryable<Employee> GetEmployees()
+        //// GET: Employees
+        //public ActionResult Index()
+        //{
+        //    return View(GetEmployees());
+        //}
+
+        // GET: Employees
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, string currentMinSalFilter, 
+            string currentMaxSalFilter, string minSalaryString, string maxSalaryString, int? page)
         {
-            return db.Employees;
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.SortingIDParm = string.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
+            ViewBag.SortingNameParm = sortOrder == "name" ? "name_desc" : "name";
+            ViewBag.SortingLoginNameParm = sortOrder == "loginname" ? "loginname_desc" : "loginname";
+            ViewBag.SortingSalaryParm = sortOrder == "salary" ? "salary_desc" : "salary";
+
+            if (searchString != null)
+                page = 1;
+            else
+                searchString = currentFilter;
+
+            ViewBag.CurrentFilter = searchString;
+
+            if (minSalaryString != null || maxSalaryString != null)
+                page = 1;
+            else
+            {
+                if (minSalaryString == null)
+                    minSalaryString = currentMinSalFilter;
+                if (maxSalaryString == null)
+                    maxSalaryString = currentMaxSalFilter;
+            }
+
+            ViewBag.CurrentMinSalFilter = minSalaryString;
+            ViewBag.CurrentMaxSalFilter = maxSalaryString;
+
+            List<Employee> employees = GetEmployees();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                employees = employees.Where(s => s.EmployeeID.Contains(searchString)
+                                       || s.LoginName.Contains(searchString)
+                                       || s.Name.Contains(searchString)).ToList();
+            }
+            if (!String.IsNullOrEmpty(minSalaryString) && Decimal.TryParse(minSalaryString, out decimal minSal))
+            {
+                employees = employees.Where(s => s.Salary >= Decimal.Parse(minSalaryString)).ToList();
+            }
+            if (!String.IsNullOrEmpty(maxSalaryString) && Decimal.TryParse(maxSalaryString, out decimal maxSal))
+            {
+                employees = employees.Where(s => s.Salary <= Decimal.Parse(maxSalaryString)).ToList();
+            }
+
+            switch (sortOrder)
+            {
+                case "id_desc":
+                    employees = employees.OrderByDescending(s => s.EmployeeID).ToList();
+                    break;
+                case "name_desc":
+                    employees = employees.OrderByDescending(s => s.Name).ToList();
+                    break;
+                case "name":
+                    employees = employees.OrderBy(s => s.Name).ToList();
+                    break;
+                case "loginname_desc":
+                    employees = employees.OrderByDescending(s => s.LoginName).ToList();
+                    break;
+                case "loginname":
+                    employees = employees.OrderBy(s => s.LoginName).ToList();
+                    break;
+                case "salary_desc":
+                    employees = employees.OrderByDescending(s => s.Salary).ToList();
+                    break;
+                case "salary":
+                    employees = employees.OrderBy(s => s.EmployeeID).ToList();
+                    break;
+                default:
+                    employees = employees.OrderBy(s => s.EmployeeID).ToList();
+                    break;
+            }
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(employees.ToPagedList(pageNumber, pageSize));
         }
 
-        // GET: api/Employees/5
-        [ResponseType(typeof(Employee))]
-        public IHttpActionResult GetEmployee(string id)
+        private List<Employee> GetEmployees()
         {
-            Employee employee = db.Employees.Find(id);
-            if (employee == null)
-            {
-                return NotFound();
-            }
+            List<Employee> employees = new List<Employee>();
 
-            return Ok(employee);
-        }
-
-        // PUT: api/Employees/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutEmployee(string id, Employee employee)
-        {
-            if (!ModelState.IsValid)
+            using (var client = new HttpClient())
             {
-                return BadRequest(ModelState);
-            }
+                client.BaseAddress = new Uri(uriStr);
+                var responseTask = client.GetAsync("Users");
+                responseTask.Wait();
 
-            if (id != employee.EmployeeID)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(employee).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EmployeeExists(id))
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
                 {
-                    return NotFound();
+                    var readTask = result.Content.ReadAsAsync<List<Employee>>();
+                    readTask.Wait();
+
+                    employees = readTask.Result;
                 }
                 else
                 {
-                    throw;
+                    employees = new List<Employee>();
+
+                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
                 }
             }
-
-            return StatusCode(HttpStatusCode.NoContent);
+            return employees;
         }
 
-        // POST: api/Employees
-        [ResponseType(typeof(Employee))]
-        public IHttpActionResult PostEmployee(Employee employee)
+        // GET: Employees/Details/5
+        public ActionResult Details(string id)
         {
-            if (!ModelState.IsValid)
+            if (id == null)
             {
-                return BadRequest(ModelState);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            Employee emp = new Employee();
 
-            db.Employees.Add(employee);
+            using (var client = new HttpClient())
+            {
 
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateException)
-            {
-                if (EmployeeExists(employee.EmployeeID))
+                client.BaseAddress = new Uri(uriStr);
+                var responseTask = client.GetAsync("Users/" + id);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
                 {
-                    return Conflict();
+                    var readTask = result.Content.ReadAsAsync<Employee>();
+                    readTask.Wait();
+
+                    emp = readTask.Result;
                 }
                 else
                 {
-                    throw;
+                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                }
+
+                if (emp == null)
+                {
+                    return HttpNotFound();
                 }
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = employee.EmployeeID }, employee);
+            return View(emp);
         }
 
-        // DELETE: api/Employees/5
-        [ResponseType(typeof(Employee))]
-        public IHttpActionResult DeleteEmployee(string id)
+        // GET: Employees/Create
+        public ActionResult Create()
         {
+            return View();
+        }
+
+        // POST: Employees/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "EmployeeID,LoginName,Name,Salary")] Employee employee)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(uriStr);
+                    var postTask = client.PostAsJsonAsync<Employee>("Users", employee);
+                    postTask.Wait();
+                    var result = postTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                    }                    
+                }
+            }
+
+            return View(employee);
+        }
+
+        // GET: Employees/Edit/5
+        public ActionResult Edit(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Employee employee = db.Employees.ToList().Find(x => x.EmployeeID == id);    
+            if (employee == null)
+            {
+                return HttpNotFound();
+            }
+            return View(employee);
+        }
+
+        // POST: Employees/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "EmployeeID,LoginName,Name,Salary")] Employee employee)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(uriStr + "Users/");
+                    var postTask = client.PutAsJsonAsync<Employee>(employee.EmployeeID, employee);
+                    postTask.Wait();
+                    var result = postTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                    }
+                }
+            }
+            return View(employee);
+        }
+
+        // GET: Employees/Delete/5
+        public ActionResult Delete(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             Employee employee = db.Employees.Find(id);
             if (employee == null)
             {
-                return NotFound();
+                return HttpNotFound();
             }
+            return View(employee);
+        }
 
-            db.Employees.Remove(employee);
-            db.SaveChanges();
+        // POST: Employees/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(string id)
+        {
+            using (var client = new HttpClient())
+            {
+                Employee emp = new Employee();
 
-            return Ok(employee);
+                client.BaseAddress = new Uri(uriStr);
+                var responseTask = client.DeleteAsync("Users/" + id);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<Employee>();
+                    readTask.Wait();
+
+                    emp = readTask.Result;
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                }
+
+                if (emp == null)
+                {
+                    return HttpNotFound();
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+        }
+
+
+        // POST: Employees/Index
+        [HttpPost]
+        public ActionResult Index(HttpPostedFileBase upload)
+        {
+            if (ModelState.IsValid && upload != null)
+            {
+                using (var client = new HttpClient())
+                {
+                    using (var formData = new MultipartFormDataContent())
+                    {
+                        byte[] fileByte;
+                        using (var reader = new BinaryReader(upload.InputStream))
+                        {
+                            fileByte = reader.ReadBytes(upload.ContentLength);
+                        }
+
+                        formData.Add(new StreamContent(new MemoryStream(fileByte)), "image", upload.FileName);
+
+                        client.BaseAddress = new Uri(uriStr);
+                        var postTask = client.PostAsync("Users/Upload", formData);
+                        postTask.Wait();
+                        var result = postTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            return RedirectToAction("Index");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                        }
+                    }                    
+                }                
+            }
+            return View(GetEmployees());
         }
 
         protected override void Dispose(bool disposing)
@@ -123,11 +343,6 @@ namespace SalaryManagementSystem.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        private bool EmployeeExists(string id)
-        {
-            return db.Employees.Count(e => e.EmployeeID == id) > 0;
         }
     }
 }

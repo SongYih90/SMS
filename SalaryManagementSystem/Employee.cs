@@ -11,12 +11,15 @@ namespace SalaryManagementSystem
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Employee
     {
+        [Display(Name = "Employee ID No.")]
         public string EmployeeID { get; set; }
+        [Display(Name = "Login Name")]
         public string LoginName { get; set; }
         public string Name { get; set; }
-        public Nullable<decimal> Salary { get; set; }
+        public decimal Salary { get; set; }
     }
 }

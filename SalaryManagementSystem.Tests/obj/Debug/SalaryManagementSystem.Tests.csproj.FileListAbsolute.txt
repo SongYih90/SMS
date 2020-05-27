@@ -79,8 +79,13 @@ D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\System.Web.
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\System.Web.WebPages.Razor.xml
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\System.Web.Optimization.xml
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\EntityFramework.xml
-D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\obj\Debug\SalaryManagementSystem.Tests.csprojAssemblyReference.cache
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\obj\Debug\SalaryManagementSystem.Tests.csproj.CoreCompileInputs.cache
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\obj\Debug\SalaryManagementSystem.Tests.csproj.CopyComplete
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\obj\Debug\SalaryManagementSystem.Tests.dll
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\obj\Debug\SalaryManagementSystem.Tests.pdb
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\obj\Debug\SalaryManagementSystem.Tests.csprojAssemblyReference.cache
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\LumenWorks.Framework.IO.dll
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\LumenWorks.Framework.IO.pdb
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\LumenWorks.Framework.IO.xml
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\PagedList.dll
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\PagedList.xml

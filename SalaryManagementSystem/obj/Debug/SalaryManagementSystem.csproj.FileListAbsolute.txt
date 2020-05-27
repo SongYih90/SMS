@@ -125,8 +125,15 @@ D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\bin\System.Web.WebPages.Dep
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\bin\System.Web.WebPages.Razor.xml
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\bin\Antlr3.Runtime.pdb
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\obj\Debug\SalaryManagementSystem.csprojAssemblyReference.cache
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\obj\Debug\SalaryManagementSystem.csproj.CoreCompileInputs.cache
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\obj\Debug\SalaryManagementSystem.csproj.CopyComplete
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\obj\Debug\SalaryManagementSystem.dll
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\obj\Debug\SalaryManagementSystem.pdb
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\bin\LumenWorks.Framework.IO.dll
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\bin\LumenWorks.Framework.IO.pdb
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\bin\LumenWorks.Framework.IO.xml
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\bin\PagedList.dll
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\bin\PagedList.Mvc.dll
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\bin\PagedList.xml
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\bin\PagedList.Mvc.xml
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem\obj\Debug\SalaryManagementSystem.csprojAssemblyReference.cache
