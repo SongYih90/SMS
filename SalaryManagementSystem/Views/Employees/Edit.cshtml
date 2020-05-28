@@ -13,6 +13,7 @@
 <div class="form-horizontal">
     <h4>Employee</h4>
     <hr />
+    @Html.ValidationMessage("CustomError")
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.EmployeeID)
 

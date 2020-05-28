@@ -61,6 +61,11 @@ namespace SalaryManagementSystem.Controllers
                 return BadRequest();
             }
 
+            if (db.Employees.ToList().FindAll(x => x.LoginName == employee.LoginName && x.EmployeeID != employee.EmployeeID).Count() > 0)
+            {
+                return BadRequest("Login Name belonging to another ID already exist in the system. ");
+            }
+
             db.SetModified(employee);
 
             try
@@ -89,6 +94,22 @@ namespace SalaryManagementSystem.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            string errMsg = string.Empty;
+            if (db.Employees.ToList().FindAll(x => x.EmployeeID == employee.EmployeeID).Count() > 0)
+            {
+                errMsg += "Employee ID already exist in system. ";
+            }
+
+            if (db.Employees.ToList().FindAll(x => x.LoginName == employee.LoginName).Count() > 0)
+            {
+                errMsg += "Login Name already exist in system. ";
+            }
+            
+            if (errMsg != string.Empty)
+            {
+                return BadRequest(errMsg);
             }
 
             try

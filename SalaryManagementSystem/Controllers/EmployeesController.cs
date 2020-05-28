@@ -194,7 +194,7 @@ namespace SalaryManagementSystem.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                        ModelState.AddModelError("CustomError", "Error. " + result.Content.ReadAsStringAsync().Result);
                     }                    
                 }
             }
@@ -236,7 +236,7 @@ namespace SalaryManagementSystem.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                        ModelState.AddModelError("CustomError", "Error. " + result.Content.ReadAsStringAsync().Result);
                     }
                 }
             }
