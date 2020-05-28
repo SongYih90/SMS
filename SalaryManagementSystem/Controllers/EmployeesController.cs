@@ -99,7 +99,7 @@ namespace SalaryManagementSystem.Controllers
 
         private IPagedList<Employee> GetEmployeesPagelist(List<Employee> employees, int? page)
         {
-            int pageSize = 3;
+            int pageSize = 30;
             int pageNumber = (page ?? 1);
             return employees.ToPagedList(pageNumber, pageSize);
         }
