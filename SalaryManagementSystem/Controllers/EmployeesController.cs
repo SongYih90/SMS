@@ -100,9 +100,14 @@ namespace SalaryManagementSystem.Controllers
                     break;
             }
 
+            return View(GetEmployeesPagelist(employees, page));
+        }
+
+        private IPagedList<Employee> GetEmployeesPagelist(List<Employee> employees, int? page)
+        {
             int pageSize = 3;
             int pageNumber = (page ?? 1);
-            return View(employees.ToPagedList(pageNumber, pageSize));
+            return employees.ToPagedList(pageNumber, pageSize);
         }
 
         private List<Employee> GetEmployees()
@@ -324,16 +329,19 @@ namespace SalaryManagementSystem.Controllers
                         var result = postTask.Result;
                         if (result.IsSuccessStatusCode)
                         {
-                            return RedirectToAction("Index");
+                            ModelState.AddModelError("CustomError", "Upload success.");
                         }
                         else
                         {
-                            ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                            ModelState.AddModelError("CustomError", "Error. " + result.Content.ReadAsStringAsync().Result);
                         }
                     }                    
                 }                
             }
-            return View(GetEmployees());
+            else if(upload == null){
+                ModelState.AddModelError("CustomError", "Error. Please select a file.");
+            }
+            return View(GetEmployeesPagelist(GetEmployees(), 1));
         }
 
         protected override void Dispose(bool disposing)

@@ -23,7 +23,11 @@ namespace SalaryManagementSystem.Controllers
         {
             db = repository;
         }
-    
+
+        public UsersController()
+        {
+        }
+
         // GET: api/Users
         public IQueryable<Employee> GetEmployees()
         {
@@ -162,10 +166,17 @@ namespace SalaryManagementSystem.Controllers
                         {
                             Stream stream = upload.InputStream;
                             DataTable csvTable = new DataTable();
-                            using (CsvReader csvReader =
-                                new CsvReader(new StreamReader(stream), true))
+                            try
                             {
-                                csvTable.Load(csvReader);
+                                using (CsvReader csvReader =
+                                    new CsvReader(new StreamReader(stream), true))
+                                {
+                                    csvTable.Load(csvReader);
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                return BadRequest("Corrupted data, there are rows with too many or too few columns");
                             }
 
                             List<Employee> employeeDetails = new List<Employee>();
@@ -185,7 +196,7 @@ namespace SalaryManagementSystem.Controllers
                                 if (Decimal.TryParse(row["Salary"].ToString(), out decimal result) && result >= 0)
                                     emp.Salary = Decimal.Parse(row["Salary"].ToString());
                                 else
-                                    errorMsg += "Row " + rowCount + " does not have the correct value for salary.<br />";
+                                    errorMsg += "Row " + rowCount + " does not have the correct value for salary. ";
 
                                 //if (employeeDetails.FindAll(x => x.EmployeeID == emp.EmployeeID).Count() > 0)
                                 //    errorMsg += "Row " + rowCount + " Employee ID already exist in the current file.<br />";
@@ -194,13 +205,13 @@ namespace SalaryManagementSystem.Controllers
                                 //    errorMsg += "Row " + rowCount + " Employee ID already exist in the system.<br />";
 
                                 if (employeeDetails.FindAll(x => x.LoginName == emp.LoginName && x.EmployeeID != emp.EmployeeID).Count() > 0)
-                                    errorMsg += "Row " + rowCount + " Login Name already exist in the current file.<br />";
+                                    errorMsg += "Row " + rowCount + " Login Name belonging to another ID already exist in the current file. ";
 
                                 if (db.Employees.AsNoTracking().ToList().FindAll(x => x.LoginName == emp.LoginName && x.EmployeeID != emp.EmployeeID).Count() > 0)
-                                    errorMsg += "Row " + rowCount + " Login Name already exist in the system.<br />";
+                                    errorMsg += "Row " + rowCount + " Login Name belonging to another ID already exist in the system. ";
 
                                 if (emp.EmployeeID == string.Empty || emp.LoginName == string.Empty || emp.Name == string.Empty)
-                                    errorMsg += "Row " + rowCount + " has empty data." + Environment.NewLine;
+                                    errorMsg += "Row " + rowCount + " has empty data. ";
 
                                 employeeDetails.Add(emp);
                                 rowCount++;
@@ -230,12 +241,12 @@ namespace SalaryManagementSystem.Controllers
                     }
                     else
                     {
-                        return BadRequest();
+                        return BadRequest("Please upload only CSV file.");
                     }
                 }
                 else
                 {
-                    return BadRequest();
+                    return BadRequest("File is empty.");
                 }
             }
             catch (DbUpdateException)
