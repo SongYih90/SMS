@@ -18,13 +18,7 @@ namespace SalaryManagementSystem.Controllers
     {
         private SalaryManagementEntities db = new SalaryManagementEntities();
         private string uriStr = "http://localhost/SalaryManagement/api/";
-
-        //// GET: Employees
-        //public ActionResult Index()
-        //{
-        //    return View(GetEmployees());
-        //}
-
+        
         // GET: Employees
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, string currentMinSalFilter, 
             string currentMaxSalFilter, string minSalaryString, string maxSalaryString, int? page)
@@ -182,8 +176,6 @@ namespace SalaryManagementSystem.Controllers
         }
 
         // POST: Employees/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "EmployeeID,LoginName,Name,Salary")] Employee employee)
@@ -226,8 +218,6 @@ namespace SalaryManagementSystem.Controllers
         }
 
         // POST: Employees/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "EmployeeID,LoginName,Name,Salary")] Employee employee)

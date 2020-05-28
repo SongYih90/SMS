@@ -197,13 +197,7 @@ namespace SalaryManagementSystem.Controllers
                                     emp.Salary = Decimal.Parse(row["Salary"].ToString());
                                 else
                                     errorMsg += "Row " + rowCount + " does not have the correct value for salary. ";
-
-                                //if (employeeDetails.FindAll(x => x.EmployeeID == emp.EmployeeID).Count() > 0)
-                                //    errorMsg += "Row " + rowCount + " Employee ID already exist in the current file.<br />";
-
-                                //if (employeeDetailsInDatabase.FindAll(x => x.EmployeeID == emp.EmployeeID).Count() > 0)
-                                //    errorMsg += "Row " + rowCount + " Employee ID already exist in the system.<br />";
-
+                                
                                 if (employeeDetails.FindAll(x => x.LoginName == emp.LoginName && x.EmployeeID != emp.EmployeeID).Count() > 0)
                                     errorMsg += "Row " + rowCount + " Login Name belonging to another ID already exist in the current file. ";
 
