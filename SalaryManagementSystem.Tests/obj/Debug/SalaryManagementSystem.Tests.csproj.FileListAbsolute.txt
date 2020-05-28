@@ -62,7 +62,6 @@ D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\System.Web.
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\System.Web.WebPages.dll
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\System.Web.WebPages.Razor.dll
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\System.Web.Optimization.dll
-D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\EntityFramework.dll
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\SalaryManagementSystem.pdb
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\SalaryManagementSystem.dll.config
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
@@ -89,3 +88,11 @@ D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\LumenWorks.
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\LumenWorks.Framework.IO.xml
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\PagedList.dll
 D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\PagedList.xml
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\Castle.Core.dll
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\Moq.dll
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\System.Threading.Tasks.Extensions.dll
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\Castle.Core.xml
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\Moq.xml
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+D:\Songyih\Projects\SMS\trunk\SalaryManagementSystem.Tests\bin\Debug\System.Threading.Tasks.Extensions.xml

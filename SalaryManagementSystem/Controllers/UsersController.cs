@@ -18,7 +18,12 @@ namespace SalaryManagementSystem.Controllers
     public class UsersController : ApiController
     {
         private SalaryManagementEntities db = new SalaryManagementEntities();
-
+        
+        public UsersController(SalaryManagementEntities repository)
+        {
+            db = repository;
+        }
+    
         // GET: api/Users
         public IQueryable<Employee> GetEmployees()
         {
@@ -29,7 +34,7 @@ namespace SalaryManagementSystem.Controllers
         [ResponseType(typeof(Employee))]
         public IHttpActionResult GetEmployee(string id)
         {
-            Employee employee = db.Employees.ToList().Find(x => x.EmployeeID == id);
+            Employee employee = db.Employees.Find(id);
             if (employee == null)
             {
                 return NotFound();
@@ -52,7 +57,7 @@ namespace SalaryManagementSystem.Controllers
                 return BadRequest();
             }
 
-            db.Entry(employee).State = EntityState.Modified;
+            db.SetModified(employee);
 
             try
             {

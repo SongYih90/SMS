@@ -26,5 +26,10 @@ namespace SalaryManagementSystem
         }
     
         public virtual DbSet<Employee> Employees { get; set; }
+
+        public virtual void SetModified(Employee emp)
+        {
+            Entry(emp).State = EntityState.Modified;
+        }
     }
 }
